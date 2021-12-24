@@ -1,0 +1,17 @@
+[package]
+name = "echo"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+tokio = {version = "1",features = ["full"]} 
+axum = {version = "0.3.4"}
+serde = {version = "1", features = ["derive"]}
+sqlx = {version = "0.5.9",features=[ "mysql","runtime-tokio-native-tls","chrono","uuid"]}
+
+
+[dev-dependencies]
+serde_json = "1.0.71"
+uuid = {version="0.8.2",features=["v5","v4","serde","sha1","md5"]}
