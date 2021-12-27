@@ -1,4 +1,4 @@
-use super::model;
+use crate::model::link::{Link as LinkModel,BaseResult};
 use axum::{
     extract::Extension,
     http::StatusCode,
@@ -13,10 +13,10 @@ pub async fn home_page() -> Html<&'static str> {
     Html("<h1>Hello, world!</h1>")
 }
 
-pub async fn link_create(Json(payload): Json<model::CreateUser>) -> impl IntoResponse {
-    let user = model::Link {
+pub async fn link_create(Json(payload): Json<LinkModel>) -> impl IntoResponse {
+    let user = LinkModel {
         id: 3389,
-        url: payload.username,
+        url: payload.url,
         tiny: "payload.username".to_owned(),
     };
     (StatusCode::CREATED, Json(user))
@@ -27,11 +27,11 @@ pub async fn link_list(Extension(db): Extension<MySqlPool>) -> impl IntoResponse
         .fetch_all(&db)
         .await
         .expect("查询失败");
-    let mut results: Vec<model::Link> = Vec::new();
+    let mut results: Vec<LinkModel> = Vec::new();
 
     // NOTE: Booleans in MySQL are stored as `TINYINT(1)` / `i8` 0 = false, non-0 = true
     for rec in recs {
-        let user = model::Link {
+        let user = LinkModel {
             id: rec.id,
             tiny: rec.tiny.expect("ok").to_owned(),
             url: rec.url.expect("url is null").to_owned(),
@@ -42,5 +42,5 @@ pub async fn link_list(Extension(db): Extension<MySqlPool>) -> impl IntoResponse
 }
 
 fn json_data<T: Serialize>(data: T) -> impl IntoResponse {
-    (StatusCode::OK, Json(model::BaseResult::ok(data)))
+    (StatusCode::OK, Json(BaseResult::ok(data)))
 }

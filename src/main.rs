@@ -3,10 +3,8 @@ use std::{env, net::SocketAddr};
 
 use sqlx;
 use sqlx::mysql::MySqlPool;
-mod dao;
-mod handler;
-mod model;
-mod schema;
+use echo::handler::link::{home_page, link_create, link_list};
+
 
 #[tokio::main]
 async fn main() {
@@ -15,8 +13,8 @@ async fn main() {
     let db = MySqlPool::connect(&url).await.expect("数据库连接失败");
 
     let app = Router::new()
-        .route("/links", get(handler::link_list).post(handler::link_create))
-        .route("/", get(handler::home_page))
+        .route("/links", get(link_list).post(link_create))
+        .route("/", get(home_page))
         .layer(AddExtensionLayer::new(db));
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));

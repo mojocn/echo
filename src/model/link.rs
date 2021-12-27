@@ -14,12 +14,6 @@ pub struct Link {
     pub tiny:String,
 }
 
-pub struct Flow {
-    pub id:i64,
-    pub url:String,
-    pub tiny:String,
-}
-
 
 
 #[derive(Debug,Serialize,Deserialize)]
